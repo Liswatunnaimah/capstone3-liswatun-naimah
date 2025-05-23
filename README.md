@@ -2,161 +2,143 @@
 
 # **CAPSTONE PROJECT MODUL 3 - Predicting Hotel Booking Cancellation (Klasifikasi)**
 
-### Dataset: Hotel Booking Demand
-
-### Author: Liswatun Naimah
-
----
-
-## Project Overview
-
-Proyek ini bertujuan membangun model klasifikasi untuk memprediksi apakah reservasi hotel akan dibatalkan (`is_canceled`). Dataset berisi data pemesanan hotel di Portugal, mencakup informasi negara asal tamu, channel pemesanan, tipe pelanggan, hingga permintaan khusus. Model ini diharapkan membantu manajemen hotel dalam mengambil tindakan preventif untuk menurunkan potensi pembatalan dan kerugian operasional maupun finansial.
+### Dataset: Hotel Booking Demand  
+### Author: Liswatun Naimah  
 
 ---
 
-## Business Understanding
-
-### Business Context
-
-Industri perhotelan mengalami tantangan besar akibat tingginya angka pembatalan reservasi. Hal ini berdampak pada pendapatan, pengelolaan kamar, logistik staf, dan stok makanan. Model prediksi pembatalan pemesanan yang akurat dapat membantu hotel melakukan tindakan preventif untuk mengurangi kerugian.
-
-### Masalah Bisnis
-
-* Booking cancellation rate tinggi
-* Tidak ada sistem prediktif otomatis
-
-### Dampak Negatif Saat Ini
-
-* Loss of Revenue
-* Wasted Effort
-* Penurunan Customer Experience
-
-### Stakeholder
-
-* Primary: Tim Manajemen Hotel
-* Secondary: Tim Revenue Management, Tim Customer Experience, Tim Marketing
-
-### Tujuan Proyek
-
-* Memprediksi status pembatalan reservasi
-* Menghasilkan insight yang actionable
-* Mengoptimalkan strategi promosi dan efisiensi operasional
-
-### Problem Conversion to ML
-
-* Input: Informasi pemesanan
-* Output: Prediksi label `is_canceled`
-* Model Type: Classification
-* Learning Type: Supervised Learning
-
-### Evaluation Strategy & Metrics
-
-* Fokus: Recall (kelas 1)
-* Tambahan: F1 Score, PR Curve
-* PR Curve dipilih karena data imbalance
+## Project Overview  
+Proyek ini bertujuan membangun model klasifikasi untuk memprediksi apakah reservasi hotel akan dibatalkan (`is_canceled`). Dataset berisi data pemesanan hotel di Portugal. Model ini diharapkan membantu manajemen hotel mengambil tindakan preventif untuk mengurangi pembatalan dan kerugian finansial.
 
 ---
 
-## Dataset
+## Business Understanding  
 
-* Jumlah Observasi: 83.573
-* Jumlah Fitur: 11
-* Target: `is_canceled`
-* Link Dataset: [GDrive](https://drive.google.com/file/d/1YGCuluHZC8PvNAXNXF4ymu1jM6ejHSJv/view?usp=drive_link)
+### Business Problem  
+- Tingginya *booking cancellation rate* menyebabkan kerugian pendapatan dan inefisiensi operasional.  
+- Belum ada sistem prediktif otomatis untuk mengantisipasi pembatalan.
 
----
+### Stakeholders  
+- **Utama:** Tim Manajemen Hotel  
+- **Pendukung:** Tim Revenue Management, Marketing, dan Customer Experience  
 
-## Data Understanding
-
-* Imputasi `country` = 'Unknown' (karena missing < 0.5%)
-* Duplikat ditemukan banyak, namun **tidak dihapus** agar tidak terjadi data loss → dipertahankan karena tidak ada ID unik
-
----
-
-## Data Preparation
-
-* Feature capping dilakukan pada: `previous_cancellations`, `booking_changes`, `days_in_waiting_list`, `required_car_parking_spaces`
-* Pembagian fitur numerik & kategorikal
-* Train-Test Split 80:20 (stratified)
-* Preprocessing pipeline dengan `ColumnTransformer` (numerik = scaling, kategorikal = OHE)
+### Objective  
+- Mengembangkan model klasifikasi untuk memprediksi `is_canceled`.  
+- Mendukung keputusan berbasis data dalam promosi dan operasional.
 
 ---
 
-## Exploratory Data Analysis (EDA)
+## Problem Conversion  
 
-* Fitur `market_segment`, `deposit_type`, dan `total_of_special_requests` memiliki korelasi visual & statistik dengan target
-* Dilakukan uji statistik (T-Test, Chi-Square)
-* Semua fitur signifikan terhadap `is_canceled`
-
----
-
-## Modeling
-
-* Model baseline: Logistic Regression, Decision Tree, KNN
-* Model akhir: Random Forest, AdaBoost, XGBoost, LightGBM (tuning)
-* Penanganan imbalance dengan SMOTE
-* Hyperparameter tuning dengan RandomizedSearchCV
-* Metrik utama: Recall & F1 Score
+- **Input:** Informasi pemesanan hotel  
+- **Output:** Prediksi status pembatalan (`is_canceled`: 0 atau 1)  
+- **Model Type:** Classification  
+- **Learning Type:** Supervised Learning  
 
 ---
 
-## Explainability
+## Dataset Overview  
 
-* SHAP Summary & Force Plot untuk LightGBM
-* Menunjukkan fitur penting: `total_of_special_requests`, `deposit_type`, `country`
-* LIME digunakan untuk verifikasi interpretasi model pada sample individual
-
----
-
-## Final Evaluation
-
-* Classification Report: Recall = 0.69 untuk kelas cancel
-* Confusion Matrix menunjukkan prediksi dominan benar pada kedua kelas
-* Model cukup akurat dan explainable
+- **Jumlah Observasi:** 83.573  
+- **Fitur:** 11 kolom  
+- **Target:** `is_canceled`  
+- **Link Dataset:** [Google Drive](https://drive.google.com/file/d/1YGCuluHZC8PvNAXNXF4ymu1jM6ejHSJv/view?usp=drive_link)
 
 ---
 
-## Deployment Plan
+## Data Understanding  
 
-* Model LightGBM disimpan untuk deployment
-* Akan diintegrasikan ke sistem reservasi hotel
-* Model siap menerima input user untuk prediksi cancelation
-* Implementasi disarankan via backend Flask/Streamlit + Dashboard untuk tim marketing
-
----
-
-## Business Recommendation
-
-### Simulasi Dampak Finansial
-
-* Tanpa model: 654 pelanggan → promo ke semua = biaya 65.400
-* Dengan model: hanya 86 yang benar-benar perlu → biaya hanya 13.100
-* Penghematan: **52.300**
-
-### Tambahan Dampak
-
-* Jika promo ditingkatkan jadi 250 per pelanggan tetap lebih hemat dibanding promosi massal
-
-### Future Recommendation
-
-1. Tambahkan fitur seperti `loyalty_level`, `amount_spent`, `last_login`, dll
-2. Tambahkan metrik seperti F2 jika ingin fokus ke recall
-3. Gunakan data tambahan di musim tertentu untuk mempertajam prediksi
-4. Lanjutkan A/B Testing pada hasil implementasi model
+- Kolom dengan missing value: hanya `country` (~0.4%)  
+- Banyak data terindikasi duplikat → tidak dihapus untuk menjaga representasi perilaku pelanggan  
+- Identifikasi fitur numerik dan kategorikal dilakukan untuk persiapan preprocessing  
+- Distribusi target tidak seimbang (imbalanced): `63% not canceled`, `37% canceled`  
 
 ---
 
-## Model Limitation
+## Data Cleaning  
 
-* Hanya berlaku untuk pola historis
-* Tidak bisa menangkap perubahan perilaku booking baru
-* Bergantung pada kualitas dan cakupan data historis
-* Fitur `reserved_room_type` anonim → tidak transparan secara bisnis
+- Imputasi missing value `country` dengan `'Unknown'`  
+- Duplikat dipertahankan karena tidak ada ID unik  
+- Deteksi dan observasi outlier pada fitur numerik dilakukan  
+- EDA dilakukan pada semua fitur untuk memahami distribusi data dan hubungan dengan target  
 
 ---
 
-## Conclusion
+## Feature Engineering & Selection  
 
-Model LightGBM yang dibangun berhasil memprediksi pembatalan reservasi dengan cukup baik dan memiliki interpretasi yang transparan melalui SHAP dan LIME. Model ini dapat memberikan dampak positif terhadap strategi pemasaran dan efisiensi operasional hotel.
+- Melakukan **outlier capping** pada fitur numerik: `previous_cancellations`, `booking_changes`, `days_in_waiting_list`, dan `required_car_parking_spaces`  
+- Menyusun pipeline untuk **scaling** fitur numerik dan **encoding** fitur kategorikal  
+- Tidak membuat fitur baru, fokus pada transformasi dan pemilihan fitur existing yang relevan secara bisnis  
+- Seleksi fitur berdasarkan korelasi terhadap target dan uji statistik (Chi-Square, T-test)
+
+---
+
+## Modeling & Evaluation  
+
+- Model baseline: Logistic Regression, KNN, Decision Tree  
+- Model final: Random Forest, AdaBoost, XGBoost, LightGBM  
+- Penanganan data imbalance: SMOTE  
+- Evaluasi menggunakan:
+  - **Recall** (utama karena False Negative lebih merugikan)
+  - **F1 Score**
+  - **PR Curve**
+  - ROC hanya sebagai pelengkap  
+
+- **Hyperparameter Tuning**: RandomizedSearchCV  
+
+---
+
+## Explainability  
+
+- **SHAP (SHapley Additive Explanations)** digunakan untuk menjelaskan kontribusi setiap fitur terhadap output model  
+- Visualisasi SHAP Summary Plot dan Force Plot menunjukkan bahwa fitur seperti `total_of_special_requests`, `deposit_type`, dan `country` merupakan faktor paling berpengaruh terhadap pembatalan reservasi  
+- SHAP membantu meningkatkan transparansi model dan membangun kepercayaan dari stakeholder non-teknis  
+
+---
+
+## Final Result & Metrics  
+
+- Model terbaik: **LightGBM**  
+- Recall kelas cancel: **0.69**  
+- Classification report menunjukkan performa baik secara keseluruhan  
+- Model cukup akurat dan explainable melalui SHAP  
+
+---
+
+## Deployment Plan  
+
+- Model LightGBM disimpan untuk deployment  
+- Direkomendasikan integrasi via **Flask API** / **Streamlit App**  
+- Dashboard tambahan dapat digunakan untuk tim marketing atau manajemen hotel  
+
+---
+
+## Business Simulation & Recommendation  
+
+### Simulasi Biaya Promosi:
+- Tanpa model: 654 pelanggan dikirim promo → biaya = 65.400  
+- Dengan model: hanya 86 yang benar-benar perlu → biaya = 13.100  
+- **Penghematan: Rp 52.300**  
+
+### Rekomendasi Lanjutan:
+1. Tambahkan fitur loyalitas dan spending behavior  
+2. Lakukan A/B Testing implementasi model  
+3. Gunakan F2 Score jika ingin lebih menekankan recall  
+4. Tambahkan data musiman, tanggal, atau hari libur untuk prediksi yang lebih tajam  
+
+---
+
+## Model Limitation  
+
+- Hanya valid untuk pola historis dalam dataset  
+- Tidak bisa mengenali pola baru di luar observasi  
+- Fitur `reserved_room_type` bersifat anonim  
+- Performa model tergantung pada kualitas data input  
+
+---
+
+## Kesimpulan  
+
+Model klasifikasi LightGBM berhasil memprediksi pembatalan hotel dengan cukup akurat dan explainable melalui SHAP. Model ini mampu memberikan insight actionable untuk manajemen hotel dalam mengurangi kerugian dan meningkatkan efisiensi.
 
 ---
