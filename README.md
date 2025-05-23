@@ -2,6 +2,19 @@
 
 # **CAPSTONE PROJECT MODUL 3 - Predicting Hotel Booking Cancellation (Klasifikasi)**
 
+## Daftar Isi
+- [Project Overview](#project-overview)
+- [Business Understanding](#business-understanding)
+- [Dataset](#dataset)
+- [Data Understanding](#data-understanding)
+- [Data Preparation](#data-preparation)
+- [Modeling](#modeling)
+- [Model Evaluation](#model-evaluation)
+- [Interpretability](#interpretability)
+- [Deployment Plan](#deployment-plan)
+- [Business Impact & Recommendations](#business-impact--recommendations)
+- [Conclusion](#conclusion)
+
 ### Dataset: Hotel Booking Demand
 
 ### Author: Liswatun Naimah
